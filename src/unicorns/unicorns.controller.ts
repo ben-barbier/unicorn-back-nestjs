@@ -4,6 +4,7 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
     NotFoundException,
     Param,
     ParseIntPipe,
@@ -50,7 +51,8 @@ export class UnicornsController {
     }
 
     @Delete(':id')
-    delete(@Param('id', new ParseIntPipe()) id: number) {
+    @HttpCode(204)
+    delete(@Param('id', new ParseIntPipe()) id: number): void {
         const unicorn = this.unicornsService.findOne(id);
         if (!unicorn) {
             throw new NotFoundException(`Unicorn '${id}' not found`);

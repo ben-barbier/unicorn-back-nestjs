@@ -4,6 +4,7 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
     NotFoundException,
     Param,
     ParseIntPipe,
@@ -50,7 +51,8 @@ export class CapacitiesController {
     }
 
     @Delete(':id')
-    delete(@Param('id', new ParseIntPipe()) id: number) {
+    @HttpCode(204)
+    delete(@Param('id', new ParseIntPipe()) id: number): void {
         const capacity = this.capacitiesService.findOne(id);
         if (!capacity) {
             throw new NotFoundException(`Capacity '${id}' not found`);
