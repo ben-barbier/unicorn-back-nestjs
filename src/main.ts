@@ -12,6 +12,8 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
 
+    app.enableCors();
+
     await app.listen(3000);
     const appUrl = await app.getUrl();
     console.log(`Server is listening on ${appUrl}`);
