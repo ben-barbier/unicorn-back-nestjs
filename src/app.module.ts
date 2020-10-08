@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { UnicornsController } from './unicorns/unicorns.controller';
-import { UnicornsService } from './unicorns/unicorns.service';
-import { CapacitiesController } from './capacities/capacities.controller';
-import { CapacitiesService } from './capacities/capacities.service';
+import { UnicornsController } from './resources/unicorns/unicorns.controller';
+import { UnicornsService } from './resources/unicorns/unicorns.service';
+import { CapacitiesController } from './resources/capacities/capacities.controller';
+import { CapacitiesService } from './resources/capacities/capacities.service';
+import { DelayMiddleware } from './middlewares/delay.middleware';
 
 @Module({
     imports: [
@@ -15,4 +16,8 @@ import { CapacitiesService } from './capacities/capacities.service';
     controllers: [UnicornsController, CapacitiesController],
     providers: [UnicornsService, CapacitiesService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(DelayMiddleware).forRoutes('unicorns', 'capacities');
+    }
+}
