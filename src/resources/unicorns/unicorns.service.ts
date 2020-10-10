@@ -34,6 +34,11 @@ export class UnicornsService {
         return unicorn;
     }
 
+    patch(id: number, unicornUpdates: Partial<Unicorn>): Unicorn {
+        const unicornOriginal = this.findOne(id);
+        return { ...unicornOriginal, ...unicornUpdates };
+    }
+
     delete(id: number): void {
         this.unicorns = this.unicorns.filter(u => u.id !== id);
     }

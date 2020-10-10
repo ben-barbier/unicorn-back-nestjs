@@ -4,10 +4,12 @@ import {
     Controller,
     Delete,
     Get,
+    Head,
     HttpCode,
     NotFoundException,
     Param,
     ParseIntPipe,
+    Patch,
     Post,
     Put,
 } from '@nestjs/common';
@@ -58,5 +60,19 @@ export class UnicornsController {
             throw new NotFoundException(`Unicorn '${id}' not found`);
         }
         return this.unicornsService.delete(id);
+    }
+
+    @Patch(':id')
+    patch(@Param('id', new ParseIntPipe()) id: number, @Body() unicornUpdates: Partial<UpdateUnicornDto>): Unicorn {
+        const unicorn = this.unicornsService.findOne(id);
+        if (!unicorn) {
+            throw new NotFoundException(`Unicorn '${id}' not found`);
+        }
+        return this.unicornsService.patch(id, unicornUpdates);
+    }
+
+    @Head(':id')
+    exists(@Param('id', new ParseIntPipe()) id: number): boolean {
+        return this.unicornsService.exists(id);
     }
 }
